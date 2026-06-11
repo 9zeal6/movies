@@ -77,6 +77,7 @@
             height: 7px;
             border-radius: 50%;
             background: #4ade80;
+            flex-shrink: 0;
         }
 
         .sync-dot.loading {
@@ -179,6 +180,30 @@
             font-family: inherit;
         }
 
+        .search-indicator {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--surface-2);
+            border-radius: var(--r-full);
+            font-size: 0.7rem;
+            color: var(--text-3);
+            margin-bottom: 8px;
+        }
+
+        .search-indicator.visible {
+            display: flex;
+        }
+
+        .search-indicator .mini-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 1.2s infinite;
+        }
+
         .radio-row {
             display: flex;
             gap: 8px;
@@ -226,6 +251,34 @@
             margin-bottom: 0;
         }
 
+        .image-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .image-row input[type="file"] {
+            flex: 1;
+            margin-bottom: 0;
+            padding: 10px 14px;
+            font-size: 0.75rem;
+        }
+
+        .image-preview-mini {
+            width: 42px;
+            height: 56px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: var(--surface-2);
+            flex-shrink: 0;
+            display: none;
+        }
+
+        .image-preview-mini.visible {
+            display: block;
+        }
+
         .btn {
             width: 100%;
             padding: 13px;
@@ -247,10 +300,6 @@
             background: var(--accent-soft);
         }
 
-        .btn-add:disabled {
-            opacity: 0.5;
-        }
-
         .movie-item {
             display: flex;
             align-items: center;
@@ -259,6 +308,7 @@
             border-radius: var(--r-md);
             padding: 12px 14px;
             margin-bottom: 7px;
+            cursor: default;
         }
 
         .movie-item.watched {
@@ -272,6 +322,7 @@
             object-fit: cover;
             background: var(--surface-2);
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .movie-info {
@@ -294,6 +345,10 @@
             font-size: 0.65rem;
             color: var(--text-3);
             margin-top: 2px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .badge {
@@ -350,30 +405,44 @@
             opacity: 1;
         }
 
-        .setup-card {
-            background: var(--surface);
-            border-radius: var(--r-md);
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 14px;
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.94);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
         }
 
-        .setup-card p {
-            font-size: 0.8rem;
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-overlay img {
+            max-width: 92%;
+            max-height: 85%;
+            border-radius: var(--r-sm);
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r-full);
+            background: rgba(255,255,255,0.05);
+            border: none;
             color: var(--text-2);
-            margin-bottom: 12px;
-            line-height: 1.5;
-        }
-
-        .setup-card input {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .setup-card .hint {
-            font-size: 0.65rem;
-            color: var(--text-3);
-            margin-top: 8px;
+            font-size: 1.4rem;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -388,12 +457,12 @@
             <span id="syncText">Загрузка...</span>
         </div>
 
-        <div id="setupCard" class="setup-card" style="display:none;">
-            <p>Для синхронизации нужен токен GitHub</p>
-            <input type="text" id="tokenInput" placeholder="Вставьте токен">
+        <div id="setupCard" class="card" style="display:none;">
+            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:12px;text-align:center;">Для синхронизации нужен токен GitHub</p>
+            <input type="text" id="tokenInput" placeholder="Токен GitHub">
             <input type="text" id="repoInput" placeholder="username/repository">
             <button class="btn btn-add" onclick="saveConfig()">Подключить</button>
-            <p class="hint">Инструкция ниже</p>
+            <p style="font-size:0.65rem;color:var(--text-3);margin-top:8px;text-align:center;">Токен создаётся в Settings → Developer settings → Tokens (classic). Нужна только галочка repo.</p>
         </div>
 
         <div id="mainContent" style="display:none;">
@@ -413,7 +482,12 @@
 
             <div class="card">
                 <label>Название</label>
-                <input type="text" id="titleInput" placeholder="Введите название" maxlength="200">
+                <input type="text" id="titleInput" placeholder="Введите название фильма или сериала" maxlength="200">
+
+                <div class="search-indicator" id="searchIndicator">
+                    <span class="mini-dot"></span>
+                    <span id="searchStatus"></span>
+                </div>
 
                 <label>Тип</label>
                 <div class="radio-row">
@@ -432,6 +506,12 @@
                     <input type="number" id="seriesWatchedInput" placeholder="Просмотрено" min="0">
                 </div>
 
+                <label>Постер</label>
+                <div class="image-row">
+                    <input type="file" id="imageInput" accept="image/*">
+                    <img id="imagePreviewMini" class="image-preview-mini" src="" alt="">
+                </div>
+
                 <button class="btn btn-add" id="addBtn" onclick="addMovie()">Добавить</button>
             </div>
 
@@ -448,14 +528,16 @@
         var githubRepo = '';
         var dataFileSha = '';
         var isSyncing = false;
+        var selectedImage = null;
+        var searchTimeout = null;
+        var foundMeta = null;
+        var contentType = 'movie';
 
-        // Попробовать загрузить из localStorage на случай офлайна
         try {
             var local = localStorage.getItem('movies_data');
             if (local) movies = JSON.parse(local);
         } catch(e) {}
 
-        // Загрузка конфигурации
         try {
             githubToken = localStorage.getItem('gh_token') || '';
             githubRepo = localStorage.getItem('gh_repo') || '';
@@ -530,7 +612,7 @@
                 render();
             })
             .catch(function(err) {
-                console.log('Загрузка с GitHub не удалась, использую локальные данные:', err.message);
+                console.log('Загрузка с GitHub не удалась:', err.message);
                 if (movies.length > 0) {
                     setSyncStatus('local');
                 } else {
@@ -544,7 +626,6 @@
 
         function saveToGitHub() {
             if (!githubToken || !githubRepo) return;
-
             if (isSyncing) return;
             isSyncing = true;
             setSyncStatus('loading');
@@ -587,6 +668,105 @@
             });
         }
 
+        function compressImage(file, maxWidth) {
+            maxWidth = maxWidth || 300;
+            return new Promise(function(resolve, reject) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = new Image();
+                    img.onload = function() {
+                        var canvas = document.createElement('canvas');
+                        var w = img.width;
+                        var h = img.height;
+                        if (w > maxWidth) { h = (h * maxWidth) / w; w = maxWidth; }
+                        canvas.width = w;
+                        canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function searchMedia(query) {
+            if (!query || query.length < 2) {
+                hideSearchIndicator();
+                foundMeta = null;
+                return;
+            }
+
+            showSearchIndicator('Поиск информации...');
+            if (searchTimeout) clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(function() {
+                var type = contentType === 'series' ? 'tv' : 'movie';
+                var url = 'https://api.themoviedb.org/3/search/' + type + '?api_key=1f54bd990f1cdfb230adb312546d765d&language=ru&query=' + encodeURIComponent(query) + '&page=1';
+
+                fetch(url)
+                    .then(function(resp) { return resp.json(); })
+                    .then(function(data) {
+                        if (data.results && data.results.length > 0) {
+                            var result = data.results[0];
+                            foundMeta = {
+                                title: result.title || result.name,
+                                year: (result.release_date || result.first_air_date || '').substring(0, 4),
+                                overview: result.overview,
+                                rating: result.vote_average,
+                                posterPath: result.poster_path,
+                                totalSeasons: result.number_of_seasons,
+                                totalEpisodes: result.number_of_episodes
+                            };
+
+                            var statusText = 'Найдено: ' + foundMeta.title;
+                            if (foundMeta.year) statusText += ' (' + foundMeta.year + ')';
+                            showSearchIndicator(statusText);
+
+                            if (contentType === 'series' && foundMeta.totalEpisodes) {
+                                document.getElementById('seriesTotalInput').value = foundMeta.totalEpisodes;
+                            }
+
+                            if (foundMeta.posterPath && !selectedImage) {
+                                var posterUrl = 'https://image.tmdb.org/t/p/w300' + foundMeta.posterPath;
+                                fetch(posterUrl)
+                                    .then(function(resp) { return resp.blob(); })
+                                    .then(function(blob) {
+                                        compressImage(blob, 200).then(function(compressed) {
+                                            if (!selectedImage) {
+                                                selectedImage = compressed;
+                                                var preview = document.getElementById('imagePreviewMini');
+                                                preview.src = compressed;
+                                                preview.classList.add('visible');
+                                                showSearchIndicator('Постер загружен автоматически');
+                                            }
+                                        });
+                                    })
+                                    .catch(function() {});
+                            }
+                        } else {
+                            foundMeta = null;
+                            hideSearchIndicator();
+                        }
+                    })
+                    .catch(function() {
+                        foundMeta = null;
+                        hideSearchIndicator();
+                    });
+            }, 600);
+        }
+
+        function showSearchIndicator(text) {
+            var el = document.getElementById('searchIndicator');
+            document.getElementById('searchStatus').textContent = text;
+            el.classList.add('visible');
+        }
+
+        function hideSearchIndicator() {
+            document.getElementById('searchIndicator').classList.remove('visible');
+        }
+
         function showToast(msg) {
             var t = document.getElementById('toast');
             t.textContent = msg;
@@ -610,11 +790,10 @@
                 return;
             }
 
-            var type = document.querySelector('input[name="type"]:checked').value;
             var seriesTotal = null;
             var seriesWatched = 0;
 
-            if (type === 'series') {
+            if (contentType === 'series') {
                 seriesTotal = parseInt(document.getElementById('seriesTotalInput').value) || null;
                 seriesWatched = parseInt(document.getElementById('seriesWatchedInput').value) || 0;
             }
@@ -622,15 +801,22 @@
             var newMovie = {
                 id: Date.now(),
                 title: title,
-                type: type,
+                type: contentType,
                 watched: false,
                 dateAdded: new Date().toLocaleDateString('ru-RU'),
+                image: selectedImage,
                 seriesTotal: seriesTotal,
-                seriesWatched: seriesWatched
+                seriesWatched: seriesWatched,
+                meta: foundMeta ? {
+                    year: foundMeta.year,
+                    rating: foundMeta.rating
+                } : null
             };
 
             movies.push(newMovie);
             clearForm();
+            hideSearchIndicator();
+            foundMeta = null;
             render();
             saveToGitHub();
             showToast('Добавлено');
@@ -641,7 +827,12 @@
             document.getElementById('seriesTotalInput').value = '';
             document.getElementById('seriesWatchedInput').value = '';
             document.getElementById('typeMovie').checked = true;
+            contentType = 'movie';
             document.getElementById('seriesFields').classList.remove('visible');
+            selectedImage = null;
+            document.getElementById('imagePreviewMini').classList.remove('visible');
+            document.getElementById('imagePreviewMini').src = '';
+            document.getElementById('imageInput').value = '';
         }
 
         function toggleMovie(id) {
@@ -668,6 +859,26 @@
             }
         }
 
+        function openImageModal(src) {
+            var modal = document.getElementById('imageModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'imageModal';
+                modal.className = 'modal-overlay';
+                modal.innerHTML = '<span class="modal-close">&times;</span><img src="" alt="Постер">';
+                document.body.appendChild(modal);
+                modal.querySelector('.modal-close').onclick = function(e) {
+                    e.stopPropagation();
+                    modal.classList.remove('show');
+                };
+                modal.onclick = function() {
+                    modal.classList.remove('show');
+                };
+            }
+            modal.querySelector('img').src = src;
+            modal.classList.add('show');
+        }
+
         function setFilter(filter, btn) {
             currentFilter = filter;
             var buttons = document.querySelectorAll('.filter-chip');
@@ -679,15 +890,53 @@
         }
 
         document.getElementById('typeSeries').addEventListener('change', function() {
+            contentType = 'series';
             document.getElementById('seriesFields').classList.add('visible');
+            var query = document.getElementById('titleInput').value.trim();
+            if (query.length >= 2) searchMedia(query);
         });
 
         document.getElementById('typeMovie').addEventListener('change', function() {
+            contentType = 'movie';
             document.getElementById('seriesFields').classList.remove('visible');
+            var query = document.getElementById('titleInput').value.trim();
+            if (query.length >= 2) searchMedia(query);
+        });
+
+        document.getElementById('titleInput').addEventListener('input', function() {
+            var query = this.value.trim();
+            if (query.length >= 2) {
+                searchMedia(query);
+            } else {
+                hideSearchIndicator();
+                foundMeta = null;
+            }
         });
 
         document.getElementById('titleInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') addMovie();
+        });
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('Файл слишком большой (макс 5 МБ)');
+                    return;
+                }
+                if (!file.type.match(/^image\//)) {
+                    showToast('Выберите изображение');
+                    return;
+                }
+                compressImage(file).then(function(compressed) {
+                    selectedImage = compressed;
+                    var preview = document.getElementById('imagePreviewMini');
+                    preview.src = compressed;
+                    preview.classList.add('visible');
+                }).catch(function() {
+                    showToast('Ошибка загрузки');
+                });
+            }
         });
 
         function render() {
@@ -717,18 +966,28 @@
             var html = '';
             for (var i = 0; i < filtered.length; i++) {
                 var m = filtered[i];
-                var poster = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-3);">' + (m.type === 'series' ? 'S' : 'F') + '</div>';
+                var posterHtml;
+                if (m.image) {
+                    posterHtml = '<img src="' + m.image + '" class="movie-poster" alt="Постер" onclick="openImageModal(\'' + m.image + '\')">';
+                } else {
+                    posterHtml = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-3);">' + (m.type === 'series' ? 'S' : 'F') + '</div>';
+                }
+
                 var badge = m.type === 'series' ? '<span class="badge">Сериал</span>' : '<span class="badge">Фильм</span>';
                 var seriesInfo = '';
                 if (m.type === 'series' && m.seriesTotal) {
                     seriesInfo = ' • ' + (m.seriesWatched || 0) + '/' + m.seriesTotal + ' серий';
                 }
+                var yearInfo = '';
+                if (m.meta && m.meta.year) {
+                    yearInfo = ' • ' + m.meta.year;
+                }
 
                 html += '<div class="movie-item' + (m.watched ? ' watched' : '') + '">' +
-                    poster +
+                    posterHtml +
                     '<div class="movie-info">' +
                         '<div class="movie-name">' + escapeText(m.title) + '</div>' +
-                        '<div class="movie-meta">' + badge + ' • ' + m.dateAdded + seriesInfo + '</div>' +
+                        '<div class="movie-meta">' + badge + yearInfo + seriesInfo + ' • ' + m.dateAdded + '</div>' +
                     '</div>' +
                     '<button class="btn-sm" onclick="toggleMovie(' + m.id + ')">' + (m.watched ? '↩' : '✓') + '</button>' +
                     '<button class="btn-sm" onclick="deleteMovie(' + m.id + ')">✕</button>' +
@@ -749,7 +1008,6 @@
             return div.innerHTML;
         }
 
-        // Запуск
         loadFromGitHub();
     </script>
 </body>
