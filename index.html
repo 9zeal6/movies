@@ -12,19 +12,14 @@
             --bg: #0a0a0b;
             --surface: #141416;
             --surface-2: #1c1c1f;
-            --surface-3: #242429;
             --text: #ececee;
             --text-2: #9d9da4;
             --text-3: #63636b;
             --accent: #b8944b;
             --accent-soft: #d4b96a;
-            --accent-dim: rgba(184, 148, 75, 0.18);
-            --accent-glow: rgba(184, 148, 75, 0.25);
             --r-sm: 12px;
             --r-md: 18px;
-            --r-lg: 22px;
             --r-full: 100px;
-            --ease: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
             --safe-bottom: env(safe-area-inset-bottom, 16px);
         }
 
@@ -37,280 +32,60 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             min-height: 100vh;
             min-height: 100dvh;
             color: var(--text);
             display: flex;
             justify-content: center;
-            position: relative;
-            overflow-x: hidden;
             padding: 0;
-        }
-
-        .ambient {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(130px);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
-
-        .ambient-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(184, 148, 75, 0.3), transparent 70%);
-            top: -200px;
-            right: -200px;
-        }
-
-        .ambient-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(180, 160, 140, 0.2), transparent 70%);
-            bottom: -100px;
-            left: -100px;
         }
 
         .app {
             width: 100%;
             max-width: 560px;
             padding: 28px 18px calc(28px + var(--safe-bottom));
-            position: relative;
-            z-index: 1;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text);
-            line-height: 1;
         }
 
-        .subtitle {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--text-3);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            border-radius: var(--r-md);
-            padding: 14px 8px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .stat-value {
-            display: block;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--text-3);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 3px;
-            display: block;
-        }
-
-        .filter-row {
+        .sync-bar {
             display: flex;
-            gap: 6px;
-            margin-bottom: 20px;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .filter-chip {
-            padding: 9px 18px;
-            background: var(--surface);
-            color: var(--text-2);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: var(--r-full);
-            cursor: pointer;
-            font-size: 0.76rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            transition: var(--ease);
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        .filter-chip:active {
-            transform: scale(0.96);
-        }
-
-        .filter-chip.active {
-            color: #0a0a0b;
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .add-section {
-            margin-bottom: 14px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 0;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            font-size: 1rem;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-            outline: none;
-            caret-color: var(--accent);
-        }
-
-        .input-group input::placeholder {
-            color: var(--text-3);
-        }
-
-        .input-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.07);
-        }
-
-        .input-line::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 1.5px;
-            background: var(--accent);
-            transition: width var(--ease);
-        }
-
-        .input-group input:focus ~ .input-line::after {
-            width: 100%;
-        }
-
-        /* Тип контента */
-        .type-selector {
-            display: flex;
             gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .type-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: var(--r-full);
-            background: var(--surface);
-            color: var(--text-2);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            cursor: pointer;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            transition: var(--ease);
-            text-align: center;
-            touch-action: manipulation;
-        }
-
-        .type-btn:active {
-            transform: scale(0.96);
-        }
-
-        .type-btn.active {
-            color: #0a0a0b;
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .series-count-row {
-            display: none;
-            margin-bottom: 10px;
-        }
-
-        .series-count-row.visible {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .series-count-row input {
-            flex: 1;
-            padding: 12px 16px;
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--r-full);
-            font-size: 0.85rem;
-            outline: none;
-            caret-color: var(--accent);
-        }
-
-        .series-count-row input::placeholder {
+            margin-bottom: 18px;
+            font-size: 0.7rem;
             color: var(--text-3);
+            letter-spacing: 1px;
         }
 
-        .series-count-row .count-label {
-            color: var(--text-3);
-            font-size: 0.75rem;
-            white-space: nowrap;
-        }
-
-        /* Поиск */
-        .search-indicator {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
-            padding: 8px 16px;
-            background: var(--surface);
-            border-radius: var(--r-full);
-            font-size: 0.72rem;
-            color: var(--text-3);
-        }
-
-        .search-indicator.visible {
-            display: flex;
-        }
-
-        .search-indicator .dot {
-            width: 6px;
-            height: 6px;
+        .sync-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 1.2s infinite;
+            background: #4ade80;
+        }
+
+        .sync-dot.loading {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        .sync-dot.error {
+            background: #ef4444;
         }
 
         @keyframes pulse {
@@ -318,200 +93,185 @@
             50% { opacity: 1; }
         }
 
-        .add-actions {
-            display: flex;
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            align-items: center;
-        }
-
-        .btn-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--r-full);
-            background: var(--surface-2);
-            color: var(--text-2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: var(--ease);
-            touch-action: manipulation;
-        }
-
-        .btn-icon:active {
-            transform: scale(0.94);
-        }
-
-        .btn-icon.has-image {
-            color: var(--accent-soft);
-            border-color: var(--accent);
-            background: var(--accent-dim);
-        }
-
-        .btn-primary {
-            flex: 1;
-            padding: 13px 24px;
-            border-radius: var(--r-full);
-            background: var(--accent);
-            color: #0a0a0b;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            transition: var(--ease);
-            touch-action: manipulation;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-            background: var(--accent-soft);
-        }
-
-        .preview-area {
             margin-bottom: 16px;
         }
 
-        .preview-wrapper {
-            position: relative;
-            display: inline-block;
-            border-radius: var(--r-sm);
-            overflow: hidden;
-            animation: previewIn 0.4s var(--ease);
-        }
-
-        @keyframes previewIn {
-            from { opacity: 0; transform: translateY(6px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .preview-wrapper img {
-            max-height: 120px;
-            display: block;
-            border-radius: var(--r-sm);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .preview-remove {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 26px;
-            height: 26px;
-            border-radius: var(--r-full);
-            background: rgba(10, 10, 11, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--text-2);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .preview-remove:active {
-            background: rgba(190, 60, 60, 0.8);
-        }
-
-        .movie-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .movie-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
+        .stat-card {
             background: var(--surface);
             border-radius: var(--r-md);
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            transition: var(--ease);
-            animation: cardIn 0.4s var(--ease);
-            touch-action: manipulation;
+            padding: 12px 8px;
+            text-align: center;
         }
 
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        .stat-value {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent);
         }
 
-        .movie-card.watched {
-            opacity: 0.65;
-        }
-
-        .movie-poster {
-            width: 44px;
-            height: 62px;
-            border-radius: var(--r-sm);
-            object-fit: cover;
-            cursor: pointer;
-            flex-shrink: 0;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
-            transition: var(--ease);
-        }
-
-        .movie-poster:active {
-            transform: scale(0.95);
-        }
-
-        .movie-poster-placeholder {
-            width: 44px;
-            height: 62px;
-            border-radius: var(--r-sm);
-            background: var(--surface-2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border: 1px dashed rgba(255, 255, 255, 0.06);
-        }
-
-        .movie-poster-placeholder svg {
-            opacity: 0.25;
+        .stat-label {
+            font-size: 0.6rem;
+            font-weight: 700;
             color: var(--text-3);
-            width: 14px;
-            height: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .checkbox-wrap {
-            flex-shrink: 0;
+        .filter-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
-        .checkbox-wrap input {
+        .filter-chip {
+            padding: 8px 16px;
+            background: var(--surface);
+            color: var(--text-2);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: var(--r-full);
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: none;
+            font-family: inherit;
+        }
+
+        .filter-chip.active {
+            color: #0a0a0b;
+            background: var(--accent);
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--r-md);
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .card label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface-2);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--r-full);
+            color: var(--text);
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 8px;
+            font-family: inherit;
+        }
+
+        .radio-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .radio-btn {
+            flex: 1;
+        }
+
+        .radio-btn input {
             display: none;
         }
 
-        .custom-check {
-            width: 22px;
-            height: 22px;
+        .radio-btn label {
+            display: block;
+            padding: 10px;
+            text-align: center;
+            background: var(--surface-2);
             border-radius: var(--r-full);
-            border: 2px solid rgba(255, 255, 255, 0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--ease);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-2);
             cursor: pointer;
+            letter-spacing: 1px;
         }
 
-        .custom-check svg {
-            opacity: 0;
-            transition: var(--ease);
-            width: 11px;
-            height: 11px;
+        .radio-btn input:checked + label {
+            background: var(--accent);
             color: #0a0a0b;
         }
 
-        .checkbox-wrap input:checked + .custom-check {
-            background: var(--accent);
-            border-color: var(--accent);
+        .series-fields {
+            display: none;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .checkbox-wrap input:checked + .custom-check svg {
-            opacity: 1;
+        .series-fields.visible {
+            display: flex;
+        }
+
+        .series-fields input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: var(--r-full);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+
+        .btn-add {
+            background: var(--accent);
+            color: #0a0a0b;
+        }
+
+        .btn-add:active {
+            background: var(--accent-soft);
+        }
+
+        .btn-add:disabled {
+            opacity: 0.5;
+        }
+
+        .movie-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border-radius: var(--r-md);
+            padding: 12px 14px;
+            margin-bottom: 7px;
+        }
+
+        .movie-item.watched {
+            opacity: 0.55;
+        }
+
+        .movie-poster {
+            width: 40px;
+            height: 56px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: var(--surface-2);
+            flex-shrink: 0;
         }
 
         .movie-info {
@@ -519,556 +279,372 @@
             min-width: 0;
         }
 
-        .movie-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.1px;
-            line-height: 1.3;
+        .movie-name {
+            font-weight: 700;
+            font-size: 0.85rem;
             word-break: break-word;
         }
 
-        .movie-card.watched .movie-title {
+        .movie-item.watched .movie-name {
             text-decoration: line-through;
             text-decoration-color: var(--accent);
-            text-decoration-thickness: 1.5px;
-            color: var(--text-3);
         }
 
         .movie-meta {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-3);
             margin-top: 2px;
-            letter-spacing: 0.3px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
         }
 
-        .movie-type-badge {
+        .badge {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 2px 7px;
             border-radius: var(--r-full);
-            font-size: 0.62rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            background: var(--accent-dim);
+            background: rgba(184,148,75,0.2);
             color: var(--accent);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
-        .movie-type-badge.series {
-            background: rgba(184, 148, 75, 0.25);
-        }
-
-        .btn-delete {
+        .btn-sm {
             width: 34px;
             height: 34px;
             border-radius: var(--r-full);
+            border: none;
             background: transparent;
-            border: none;
             color: var(--text-3);
+            font-size: 1.1rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             flex-shrink: 0;
-            transition: var(--ease);
-            touch-action: manipulation;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-delete:active {
-            background: rgba(200, 60, 60, 0.2);
+        .btn-sm:active {
+            background: rgba(200,60,60,0.2);
             color: #d47878;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 44px 24px;
-            border-radius: var(--r-lg);
-            background: var(--surface);
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-
-        .empty-icon {
-            margin-bottom: 12px;
-            opacity: 0.35;
-            color: var(--text-3);
-        }
-
-        .empty-state p {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-2);
-            margin-bottom: 2px;
-        }
-
-        .empty-state span {
-            font-size: 0.78rem;
-            color: var(--text-3);
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.94);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-overlay img {
-            max-width: 92%;
-            max-height: 85%;
-            border-radius: var(--r-sm);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            animation: zoomIn 0.3s var(--ease);
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-            width: 40px;
-            height: 40px;
-            border-radius: var(--r-full);
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: var(--text-2);
-            font-size: 1.4rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-        }
-
-        .modal-close:active {
-            background: rgba(255, 255, 255, 0.15);
         }
 
         .toast {
             position: fixed;
-            top: 18px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 11px 22px;
+            padding: 10px 20px;
             border-radius: var(--r-full);
-            background: var(--surface-3);
+            background: var(--surface-2);
             color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.4px;
-            z-index: 2000;
-            pointer-events: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 1000;
             opacity: 0;
-            transition: opacity 0.4s ease;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            transition: opacity 0.3s;
+            pointer-events: none;
+            letter-spacing: 0.5px;
         }
 
-        .toast.visible {
+        .toast.show {
             opacity: 1;
         }
 
-        @media (max-width: 380px) {
-            .app {
-                padding: 20px 12px calc(20px + var(--safe-bottom));
-            }
-            
-            .header h1 {
-                font-size: 1.8rem;
-                letter-spacing: 2px;
-            }
-            
-            .subtitle {
-                font-size: 0.7rem;
-                letter-spacing: 3px;
-            }
-            
-            .stats-row {
-                gap: 5px;
-            }
-            
-            .stat-card {
-                padding: 10px 4px;
-                border-radius: var(--r-sm);
-            }
-            
-            .stat-value {
-                font-size: 1.2rem;
-            }
-            
-            .stat-label {
-                font-size: 0.6rem;
-            }
-            
-            .filter-chip {
-                padding: 7px 14px;
-                font-size: 0.7rem;
-            }
-            
-            .type-btn {
-                padding: 8px 12px;
-                font-size: 0.7rem;
-            }
-            
-            .movie-card {
-                padding: 10px 10px;
-                gap: 8px;
-                border-radius: var(--r-sm);
-            }
-            
-            .movie-poster,
-            .movie-poster-placeholder {
-                width: 38px;
-                height: 54px;
-            }
-            
-            .movie-title {
-                font-size: 0.82rem;
-            }
-            
-            .btn-icon {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .btn-primary {
-                padding: 12px 18px;
-                font-size: 0.8rem;
-            }
+        .setup-card {
+            background: var(--surface);
+            border-radius: var(--r-md);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 14px;
         }
 
-        @media (min-width: 768px) {
-            .app {
-                padding: 40px 24px 40px;
-            }
-            
-            .header {
-                margin-bottom: 34px;
-            }
-            
-            .header h1 {
-                font-size: 2.6rem;
-            }
-            
-            .movie-card:hover {
-                background: var(--surface-2);
-                border-color: rgba(255, 255, 255, 0.05);
-            }
-            
-            .filter-chip:hover {
-                color: var(--text);
-                background: var(--surface-2);
-            }
-            
-            .btn-icon:hover {
-                color: var(--accent-soft);
-                border-color: var(--accent-dim);
-                box-shadow: 0 0 28px var(--accent-glow);
-            }
-            
-            .btn-primary:hover {
-                background: var(--accent-soft);
-                box-shadow: 0 6px 28px var(--accent-glow);
-            }
-            
-            .btn-delete:hover {
-                background: rgba(200, 60, 60, 0.15);
-                color: #d47878;
-            }
-            
-            .movie-poster:hover {
-                box-shadow: 0 0 20px var(--accent-glow);
-            }
+        .setup-card p {
+            font-size: 0.8rem;
+            color: var(--text-2);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .setup-card input {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .setup-card .hint {
+            font-size: 0.65rem;
+            color: var(--text-3);
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="ambient ambient-1"></div>
-    <div class="ambient ambient-2"></div>
-
-    <div class="app">
-        <header class="header">
+    <div class="app" id="app">
+        <div class="header">
             <h1>Коллекция</h1>
-            <p class="subtitle">фильмов и сериалов</p>
-        </header>
-        
-        <div class="stats-row" id="statsText">
-            <div class="stat-card">
-                <span class="stat-value">0</span>
-                <span class="stat-label">Всего</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value">0</span>
-                <span class="stat-label">Просмотрено</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value">0</span>
-                <span class="stat-label">В планах</span>
-            </div>
         </div>
 
-        <div class="filter-row">
-            <button class="filter-chip active" data-filter="all">Все</button>
-            <button class="filter-chip" data-filter="unwatched">К просмотру</button>
-            <button class="filter-chip" data-filter="watched">Просмотрено</button>
-            <button class="filter-chip" data-filter="movies">Фильмы</button>
-            <button class="filter-chip" data-filter="series">Сериалы</button>
+        <div class="sync-bar">
+            <span class="sync-dot" id="syncDot"></span>
+            <span id="syncText">Загрузка...</span>
         </div>
 
-        <div class="add-section">
-            <div class="input-group">
-                <input type="text" id="movieInput" placeholder="Название фильма или сериала" maxlength="200" autocomplete="off">
-                <div class="input-line"></div>
-            </div>
-            
-            <div class="search-indicator" id="searchIndicator">
-                <span class="dot"></span>
-                <span id="searchStatus">Поиск информации...</span>
-            </div>
-
-            <div class="type-selector">
-                <button class="type-btn active" data-type="movie">Фильм</button>
-                <button class="type-btn" data-type="series">Сериал</button>
-            </div>
-
-            <div class="series-count-row" id="seriesCountRow">
-                <input type="number" id="seriesTotal" placeholder="Всего серий" min="1" max="9999">
-                <span class="count-label">серий</span>
-                <input type="number" id="seriesWatched" placeholder="Просмотрено" min="0" max="9999">
-                <span class="count-label">просм.</span>
-            </div>
-            
-            <div class="add-actions">
-                <input type="file" id="imageInput" accept="image/*" hidden>
-                <button type="button" id="imageButton" class="btn-icon" title="Добавить постер">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <rect x="3" y="3" width="18" height="18" rx="3"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <path d="M21 15l-5-5L5 21"/>
-                    </svg>
-                </button>
-                <button id="addButton" class="btn-primary">Добавить</button>
-            </div>
+        <div id="setupCard" class="setup-card" style="display:none;">
+            <p>Для синхронизации нужен токен GitHub</p>
+            <input type="text" id="tokenInput" placeholder="Вставьте токен">
+            <input type="text" id="repoInput" placeholder="username/repository">
+            <button class="btn btn-add" onclick="saveConfig()">Подключить</button>
+            <p class="hint">Инструкция ниже</p>
         </div>
 
-        <div class="preview-area" id="imagePreview" style="display: none;">
-            <div class="preview-wrapper">
-                <img id="previewImg" src="" alt="Предпросмотр">
-                <button class="preview-remove" id="removeImageBtn">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+        <div id="mainContent" style="display:none;">
+            <div class="stats-row">
+                <div class="stat-card"><span class="stat-value" id="statTotal">0</span><span class="stat-label">Всего</span></div>
+                <div class="stat-card"><span class="stat-value" id="statWatched">0</span><span class="stat-label">Просм</span></div>
+                <div class="stat-card"><span class="stat-value" id="statUnwatched">0</span><span class="stat-label">В планах</span></div>
             </div>
-        </div>
 
-        <div class="movie-grid" id="movieList"></div>
-        
-        <div class="empty-state" id="emptyMessage" style="display: none;">
-            <div class="empty-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-                    <rect x="2" y="2" width="20" height="20" rx="3"/>
-                    <path d="M7 2v20M17 2v20M2 12h20"/>
-                </svg>
+            <div class="filter-row" id="filterRow">
+                <button class="filter-chip active" onclick="setFilter('all', this)">Все</button>
+                <button class="filter-chip" onclick="setFilter('unwatched', this)">К просмотру</button>
+                <button class="filter-chip" onclick="setFilter('watched', this)">Просмотрено</button>
+                <button class="filter-chip" onclick="setFilter('movies', this)">Фильмы</button>
+                <button class="filter-chip" onclick="setFilter('series', this)">Сериалы</button>
             </div>
-            <p>Коллекция пуста</p>
-            <span>Добавьте первый фильм или сериал</span>
+
+            <div class="card">
+                <label>Название</label>
+                <input type="text" id="titleInput" placeholder="Введите название" maxlength="200">
+
+                <label>Тип</label>
+                <div class="radio-row">
+                    <div class="radio-btn">
+                        <input type="radio" name="type" id="typeMovie" value="movie" checked>
+                        <label for="typeMovie">Фильм</label>
+                    </div>
+                    <div class="radio-btn">
+                        <input type="radio" name="type" id="typeSeries" value="series">
+                        <label for="typeSeries">Сериал</label>
+                    </div>
+                </div>
+
+                <div class="series-fields" id="seriesFields">
+                    <input type="number" id="seriesTotalInput" placeholder="Всего серий" min="1">
+                    <input type="number" id="seriesWatchedInput" placeholder="Просмотрено" min="0">
+                </div>
+
+                <button class="btn btn-add" id="addBtn" onclick="addMovie()">Добавить</button>
+            </div>
+
+            <div id="movieContainer"></div>
         </div>
     </div>
 
+    <div class="toast" id="toast"></div>
+
     <script>
-        var movies = JSON.parse(localStorage.getItem('movies')) || [];
+        var movies = [];
         var currentFilter = 'all';
-        var selectedImage = null;
-        var contentType = 'movie';
-        var searchTimeout = null;
-        var foundMeta = null;
+        var githubToken = '';
+        var githubRepo = '';
+        var dataFileSha = '';
+        var isSyncing = false;
 
-        function saveMovies() {
-            localStorage.setItem('movies', JSON.stringify(movies));
-        }
+        // Попробовать загрузить из localStorage на случай офлайна
+        try {
+            var local = localStorage.getItem('movies_data');
+            if (local) movies = JSON.parse(local);
+        } catch(e) {}
 
-        function compressImage(file, maxWidth) {
-            maxWidth = maxWidth || 300;
-            return new Promise(function(resolve, reject) {
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                
-                reader.onload = function(e) {
-                    var img = new Image();
-                    img.src = e.target.result;
-                    
-                    img.onload = function() {
-                        var canvas = document.createElement('canvas');
-                        var width = img.width;
-                        var height = img.height;
-                        
-                        if (width > maxWidth) {
-                            height = (height * maxWidth) / width;
-                            width = maxWidth;
-                        }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
-                        
-                        var ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.7));
-                    };
-                    
-                    img.onerror = reject;
-                };
-                
-                reader.onerror = reject;
-            });
-        }
+        // Загрузка конфигурации
+        try {
+            githubToken = localStorage.getItem('gh_token') || '';
+            githubRepo = localStorage.getItem('gh_repo') || '';
+        } catch(e) {}
 
-        function searchMedia(query) {
-            if (!query || query.length < 2) {
-                hideSearchIndicator();
-                foundMeta = null;
+        function saveConfig() {
+            githubToken = document.getElementById('tokenInput').value.trim();
+            githubRepo = document.getElementById('repoInput').value.trim();
+            
+            if (!githubToken || !githubRepo) {
+                showToast('Заполните оба поля');
                 return;
             }
 
-            showSearchIndicator('Поиск информации...');
+            try {
+                localStorage.setItem('gh_token', githubToken);
+                localStorage.setItem('gh_repo', githubRepo);
+            } catch(e) {}
 
-            if (searchTimeout) clearTimeout(searchTimeout);
-
-            searchTimeout = setTimeout(function() {
-                var type = contentType === 'series' ? 'tv' : 'movie';
-                var url = 'https://api.themoviedb.org/3/search/' + type + '?api_key=1f54bd990f1cdfb230adb312546d765d&language=ru&query=' + encodeURIComponent(query) + '&page=1';
-
-                fetch(url)
-                    .then(function(response) { return response.json(); })
-                    .then(function(data) {
-                        if (data.results && data.results.length > 0) {
-                            var result = data.results[0];
-                            foundMeta = {
-                                title: result.title || result.name,
-                                year: (result.release_date || result.first_air_date || '').substring(0, 4),
-                                overview: result.overview,
-                                rating: result.vote_average,
-                                posterPath: result.poster_path,
-                                totalSeasons: result.number_of_seasons,
-                                totalEpisodes: result.number_of_episodes
-                            };
-
-                            showSearchIndicator('Найдено: ' + foundMeta.title + (foundMeta.year ? ' (' + foundMeta.year + ')' : ''));
-
-                            if (contentType === 'series' && foundMeta.totalEpisodes) {
-                                document.getElementById('seriesTotal').value = foundMeta.totalEpisodes;
-                            }
-
-                            if (foundMeta.posterPath && !selectedImage) {
-                                var posterUrl = 'https://image.tmdb.org/t/p/w300' + foundMeta.posterPath;
-                                fetch(posterUrl)
-                                    .then(function(resp) { return resp.blob(); })
-                                    .then(function(blob) {
-                                        compressImage(blob, 200).then(function(compressed) {
-                                            if (!selectedImage) {
-                                                selectedImage = compressed;
-                                                document.getElementById('previewImg').src = compressed;
-                                                document.getElementById('imagePreview').style.display = 'block';
-                                                document.getElementById('imageButton').classList.add('has-image');
-                                                showSearchIndicator('Найдено и загружено: ' + foundMeta.title);
-                                            }
-                                        });
-                                    })
-                                    .catch(function() {});
-                            }
-                        } else {
-                            foundMeta = null;
-                            hideSearchIndicator();
-                        }
-                    })
-                    .catch(function() {
-                        foundMeta = null;
-                        hideSearchIndicator();
-                    });
-            }, 600);
+            showToast('Сохранено! Загружаю данные...');
+            loadFromGitHub();
         }
 
-        function showSearchIndicator(text) {
-            var el = document.getElementById('searchIndicator');
-            document.getElementById('searchStatus').textContent = text;
-            el.classList.add('visible');
-        }
-
-        function hideSearchIndicator() {
-            document.getElementById('searchIndicator').classList.remove('visible');
-        }
-
-        function addMovie(title) {
-            return new Promise(function(resolve) {
-                var exists = movies.some(function(movie) {
-                    return movie.title.toLowerCase() === title.toLowerCase();
-                });
-                
-                if (exists) {
-                    showToast('Уже в коллекции');
-                    resolve(false);
-                    return;
-                }
-
-                var seriesTotal = null;
-                var seriesWatched = null;
-                if (contentType === 'series') {
-                    seriesTotal = parseInt(document.getElementById('seriesTotal').value) || null;
-                    seriesWatched = parseInt(document.getElementById('seriesWatched').value) || 0;
-                }
-                
-                var newMovie = {
-                    id: Date.now(),
-                    title: title,
-                    type: contentType,
-                    watched: false,
-                    dateAdded: new Date().toLocaleDateString('ru-RU'),
-                    image: selectedImage,
-                    seriesTotal: seriesTotal,
-                    seriesWatched: seriesWatched,
-                    meta: foundMeta ? {
-                        year: foundMeta.year,
-                        rating: foundMeta.rating
-                    } : null
-                };
-                
-                movies.push(newMovie);
-                saveMovies();
-                clearImageSelection();
-                resetForm();
-                hideSearchIndicator();
-                foundMeta = null;
-                renderMovies();
-                resolve(true);
-            });
-        }
-
-        function deleteMovie(id) {
-            var movie = movies.find(function(m) { return m.id === id; });
-            if (movie && confirm('Удалить \u00AB' + movie.title + '\u00BB из коллекции?')) {
-                movies = movies.filter(function(m) { return m.id !== id; });
-                saveMovies();
-                renderMovies();
+        function setSyncStatus(status) {
+            var dot = document.getElementById('syncDot');
+            var text = document.getElementById('syncText');
+            dot.className = 'sync-dot';
+            if (status === 'loading') {
+                dot.classList.add('loading');
+                text.textContent = 'Синхронизация...';
+            } else if (status === 'ok') {
+                text.textContent = 'Данные синхронизированы';
+            } else if (status === 'error') {
+                dot.classList.add('error');
+                text.textContent = 'Ошибка синхронизации';
+            } else if (status === 'local') {
+                text.textContent = 'Локальный режим';
             }
         }
 
-        function toggleWatched(id) {
+        function loadFromGitHub() {
+            if (!githubToken || !githubRepo) {
+                document.getElementById('setupCard').style.display = 'block';
+                document.getElementById('mainContent').style.display = 'none';
+                setSyncStatus('local');
+                render();
+                return;
+            }
+
+            setSyncStatus('loading');
+            document.getElementById('setupCard').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+
+            var apiUrl = 'https://api.github.com/repos/' + githubRepo + '/contents/movies.json';
+
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(function(resp) {
+                if (!resp.ok) throw new Error('Файл не найден');
+                return resp.json();
+            })
+            .then(function(data) {
+                dataFileSha = data.sha;
+                var content = decodeURIComponent(escape(atob(data.content)));
+                movies = JSON.parse(content);
+                try { localStorage.setItem('movies_data', content); } catch(e) {}
+                setSyncStatus('ok');
+                render();
+            })
+            .catch(function(err) {
+                console.log('Загрузка с GitHub не удалась, использую локальные данные:', err.message);
+                if (movies.length > 0) {
+                    setSyncStatus('local');
+                } else {
+                    setSyncStatus('error');
+                }
+                document.getElementById('setupCard').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                render();
+            });
+        }
+
+        function saveToGitHub() {
+            if (!githubToken || !githubRepo) return;
+
+            if (isSyncing) return;
+            isSyncing = true;
+            setSyncStatus('loading');
+
+            var content = JSON.stringify(movies, null, 2);
+            try { localStorage.setItem('movies_data', content); } catch(e) {}
+
+            var body = {
+                message: 'Обновление списка фильмов',
+                content: btoa(unescape(encodeURIComponent(content)))
+            };
+
+            if (dataFileSha) {
+                body.sha = dataFileSha;
+            }
+
+            fetch('https://api.github.com/repos/' + githubRepo + '/contents/movies.json', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then(function(resp) {
+                if (!resp.ok) throw new Error('Ошибка сохранения');
+                return resp.json();
+            })
+            .then(function(data) {
+                dataFileSha = data.content.sha;
+                setSyncStatus('ok');
+                isSyncing = false;
+            })
+            .catch(function(err) {
+                console.error('Ошибка синхронизации:', err);
+                setSyncStatus('error');
+                isSyncing = false;
+                showToast('Не удалось синхронизировать');
+            });
+        }
+
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(function() {
+                t.classList.remove('show');
+            }, 2000);
+        }
+
+        function addMovie() {
+            var title = document.getElementById('titleInput').value.trim();
+            if (!title) return;
+
+            var exists = movies.some(function(m) {
+                return m.title.toLowerCase() === title.toLowerCase();
+            });
+
+            if (exists) {
+                showToast('Уже в коллекции');
+                return;
+            }
+
+            var type = document.querySelector('input[name="type"]:checked').value;
+            var seriesTotal = null;
+            var seriesWatched = 0;
+
+            if (type === 'series') {
+                seriesTotal = parseInt(document.getElementById('seriesTotalInput').value) || null;
+                seriesWatched = parseInt(document.getElementById('seriesWatchedInput').value) || 0;
+            }
+
+            var newMovie = {
+                id: Date.now(),
+                title: title,
+                type: type,
+                watched: false,
+                dateAdded: new Date().toLocaleDateString('ru-RU'),
+                seriesTotal: seriesTotal,
+                seriesWatched: seriesWatched
+            };
+
+            movies.push(newMovie);
+            clearForm();
+            render();
+            saveToGitHub();
+            showToast('Добавлено');
+        }
+
+        function clearForm() {
+            document.getElementById('titleInput').value = '';
+            document.getElementById('seriesTotalInput').value = '';
+            document.getElementById('seriesWatchedInput').value = '';
+            document.getElementById('typeMovie').checked = true;
+            document.getElementById('seriesFields').classList.remove('visible');
+        }
+
+        function toggleMovie(id) {
             var movie = movies.find(function(m) { return m.id === id; });
             if (movie) {
                 movie.watched = !movie.watched;
@@ -1078,301 +654,103 @@
                 if (movie.type === 'series' && !movie.watched) {
                     movie.seriesWatched = 0;
                 }
-                saveMovies();
-                renderMovies();
+                render();
+                saveToGitHub();
             }
         }
 
-        function openImageModal(imageSrc) {
-            var modal = document.getElementById('imageModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'imageModal';
-                modal.className = 'modal-overlay';
-                modal.innerHTML = '<button class="modal-close">&times;</button><img src="" alt="Постер">';
-                document.body.appendChild(modal);
-                
-                modal.querySelector('.modal-close').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    closeImageModal();
-                });
-                
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal || e.target.tagName === 'IMG') {
-                        closeImageModal();
-                    }
-                });
-                
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') closeImageModal();
-                });
-            }
-            
-            modal.querySelector('img').src = imageSrc;
-            modal.classList.add('show');
-        }
-
-        function closeImageModal() {
-            var modal = document.getElementById('imageModal');
-            if (modal) {
-                modal.classList.remove('show');
+        function deleteMovie(id) {
+            var movie = movies.find(function(m) { return m.id === id; });
+            if (movie && confirm('Удалить "' + movie.title + '"?')) {
+                movies = movies.filter(function(m) { return m.id !== id; });
+                render();
+                saveToGitHub();
             }
         }
 
-        function updateStats() {
-            var total = movies.length;
-            var watched = movies.filter(function(m) { return m.watched; }).length;
-            var unwatched = total - watched;
-            
-            var cards = document.querySelectorAll('.stat-card .stat-value');
-            if (cards.length === 3) {
-                cards[0].textContent = total;
-                cards[1].textContent = watched;
-                cards[2].textContent = unwatched;
+        function setFilter(filter, btn) {
+            currentFilter = filter;
+            var buttons = document.querySelectorAll('.filter-chip');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
             }
+            btn.classList.add('active');
+            render();
         }
 
-        function renderMovies() {
-            var movieList = document.getElementById('movieList');
-            var emptyMessage = document.getElementById('emptyMessage');
-            
-            var filteredMovies = movies;
+        document.getElementById('typeSeries').addEventListener('change', function() {
+            document.getElementById('seriesFields').classList.add('visible');
+        });
+
+        document.getElementById('typeMovie').addEventListener('change', function() {
+            document.getElementById('seriesFields').classList.remove('visible');
+        });
+
+        document.getElementById('titleInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addMovie();
+        });
+
+        function render() {
+            if (!document.getElementById('mainContent').style.display || 
+                document.getElementById('mainContent').style.display === 'none') {
+                return;
+            }
+
+            var container = document.getElementById('movieContainer');
+            var filtered = movies;
+
             if (currentFilter === 'watched') {
-                filteredMovies = movies.filter(function(m) { return m.watched; });
+                filtered = movies.filter(function(m) { return m.watched; });
             } else if (currentFilter === 'unwatched') {
-                filteredMovies = movies.filter(function(m) { return !m.watched; });
+                filtered = movies.filter(function(m) { return !m.watched; });
             } else if (currentFilter === 'movies') {
-                filteredMovies = movies.filter(function(m) { return m.type === 'movie'; });
+                filtered = movies.filter(function(m) { return m.type === 'movie'; });
             } else if (currentFilter === 'series') {
-                filteredMovies = movies.filter(function(m) { return m.type === 'series'; });
+                filtered = movies.filter(function(m) { return m.type === 'series'; });
             }
-            
-            filteredMovies.sort(function(a, b) {
+
+            filtered.sort(function(a, b) {
                 if (a.watched === b.watched) return 0;
                 return a.watched ? 1 : -1;
             });
 
-            if (filteredMovies.length === 0) {
-                movieList.innerHTML = '';
-                emptyMessage.style.display = 'block';
-                
-                if (movies.length === 0) {
-                    emptyMessage.querySelector('p').textContent = 'Коллекция пуста';
-                    emptyMessage.querySelector('span').textContent = 'Добавьте первый фильм или сериал';
-                } else if (currentFilter === 'watched') {
-                    emptyMessage.querySelector('p').textContent = 'Нет просмотренных';
-                    emptyMessage.querySelector('span').textContent = 'Отмечайте после просмотра';
-                } else if (currentFilter === 'unwatched') {
-                    emptyMessage.querySelector('p').textContent = 'Всё просмотрено';
-                    emptyMessage.querySelector('span').textContent = 'Пополните коллекцию';
-                } else if (currentFilter === 'movies') {
-                    emptyMessage.querySelector('p').textContent = 'Нет фильмов';
-                    emptyMessage.querySelector('span').textContent = 'Добавьте фильмы в коллекцию';
-                } else if (currentFilter === 'series') {
-                    emptyMessage.querySelector('p').textContent = 'Нет сериалов';
-                    emptyMessage.querySelector('span').textContent = 'Добавьте сериалы в коллекцию';
+            var html = '';
+            for (var i = 0; i < filtered.length; i++) {
+                var m = filtered[i];
+                var poster = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-3);">' + (m.type === 'series' ? 'S' : 'F') + '</div>';
+                var badge = m.type === 'series' ? '<span class="badge">Сериал</span>' : '<span class="badge">Фильм</span>';
+                var seriesInfo = '';
+                if (m.type === 'series' && m.seriesTotal) {
+                    seriesInfo = ' • ' + (m.seriesWatched || 0) + '/' + m.seriesTotal + ' серий';
                 }
-            } else {
-                emptyMessage.style.display = 'none';
-                
-                movieList.innerHTML = filteredMovies.map(function(movie) {
-                    var posterHtml;
-                    if (movie.image) {
-                        posterHtml = '<img src="' + movie.image + '" class="movie-poster" alt="Постер" onclick="openImageModal(\'' + movie.image + '\')" title="Открыть постер">';
-                    } else {
-                        posterHtml = '<div class="movie-poster-placeholder"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
-                    }
 
-                    var typeBadge = movie.type === 'series' 
-                        ? '<span class="movie-type-badge series">Сериал</span>' 
-                        : '<span class="movie-type-badge">Фильм</span>';
-
-                    var seriesInfo = '';
-                    if (movie.type === 'series' && movie.seriesTotal) {
-                        seriesInfo = ' <span>' + (movie.seriesWatched || 0) + '/' + movie.seriesTotal + ' серий</span>';
-                    }
-
-                    var yearInfo = '';
-                    if (movie.meta && movie.meta.year) {
-                        yearInfo = ' <span>' + movie.meta.year + '</span>';
-                    }
-                    
-                    return '<div class="movie-card ' + (movie.watched ? 'watched' : '') + '">' +
-                        posterHtml +
-                        '<label class="checkbox-wrap" title="' + (movie.watched ? 'Отметить как непросмотренный' : 'Отметить как просмотренный') + '">' +
-                            '<input type="checkbox" ' + (movie.watched ? 'checked' : '') + ' onchange="toggleWatched(' + movie.id + ')">' +
-                            '<span class="custom-check">' +
-                                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
-                                    '<polyline points="20 6 9 17 4 12"/>' +
-                                '</svg>' +
-                            '</span>' +
-                        '</label>' +
-                        '<div class="movie-info">' +
-                            '<div class="movie-title">' + escapeHtml(movie.title) + '</div>' +
-                            '<div class="movie-meta">' +
-                                typeBadge +
-                                yearInfo +
-                                seriesInfo +
-                                '<span>' + movie.dateAdded + '</span>' +
-                            '</div>' +
-                        '</div>' +
-                        '<button class="btn-delete" onclick="deleteMovie(' + movie.id + ')" title="Удалить">' +
-                            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
-                                '<polyline points="3 6 5 6 21 6"/>' +
-                                '<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>' +
-                            '</svg>' +
-                        '</button>' +
-                    '</div>';
-                }).join('');
+                html += '<div class="movie-item' + (m.watched ? ' watched' : '') + '">' +
+                    poster +
+                    '<div class="movie-info">' +
+                        '<div class="movie-name">' + escapeText(m.title) + '</div>' +
+                        '<div class="movie-meta">' + badge + ' • ' + m.dateAdded + seriesInfo + '</div>' +
+                    '</div>' +
+                    '<button class="btn-sm" onclick="toggleMovie(' + m.id + ')">' + (m.watched ? '↩' : '✓') + '</button>' +
+                    '<button class="btn-sm" onclick="deleteMovie(' + m.id + ')">✕</button>' +
+                '</div>';
             }
+            container.innerHTML = html;
 
-            updateStats();
+            var total = movies.length;
+            var watched = movies.filter(function(m) { return m.watched; }).length;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statWatched').textContent = watched;
+            document.getElementById('statUnwatched').textContent = total - watched;
         }
 
-        function escapeHtml(text) {
+        function escapeText(text) {
             var div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        function clearImageSelection() {
-            selectedImage = null;
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('previewImg').src = '';
-            document.getElementById('imageInput').value = '';
-            document.getElementById('imageButton').classList.remove('has-image');
-        }
-
-        function resetForm() {
-            document.getElementById('movieInput').value = '';
-            document.getElementById('seriesTotal').value = '';
-            document.getElementById('seriesWatched').value = '';
-        }
-
-        function showToast(message) {
-            var toast = document.getElementById('toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'toast';
-                toast.className = 'toast';
-                document.body.appendChild(toast);
-            }
-            
-            toast.textContent = message;
-            toast.classList.add('visible');
-            
-            clearTimeout(toast._timer);
-            toast._timer = setTimeout(function() {
-                toast.classList.remove('visible');
-            }, 2000);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-
-            // Тип контента
-            document.querySelectorAll('.type-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.type-btn').forEach(function(b) {
-                        b.classList.remove('active');
-                    });
-                    btn.classList.add('active');
-                    contentType = btn.dataset.type;
-
-                    if (contentType === 'series') {
-                        document.getElementById('seriesCountRow').classList.add('visible');
-                    } else {
-                        document.getElementById('seriesCountRow').classList.remove('visible');
-                    }
-
-                    var query = document.getElementById('movieInput').value.trim();
-                    if (query.length >= 2) {
-                        searchMedia(query);
-                    }
-                });
-            });
-
-            // Поиск при вводе
-            document.getElementById('movieInput').addEventListener('input', function() {
-                var query = this.value.trim();
-                if (query.length >= 2) {
-                    searchMedia(query);
-                } else {
-                    hideSearchIndicator();
-                    foundMeta = null;
-                }
-            });
-
-            // Кнопка картинки — на мобильных предлагает камеру или галерею
-            document.getElementById('imageButton').addEventListener('click', function() {
-                var input = document.getElementById('imageInput');
-                input.click();
-            });
-            
-            document.getElementById('imageInput').addEventListener('change', function(e) {
-                var file = e.target.files[0];
-                if (file) {
-                    if (file.size > 5 * 1024 * 1024) {
-                        showToast('Слишком большой файл (макс 5 МБ)');
-                        document.getElementById('imageInput').value = '';
-                        return;
-                    }
-                    
-                    if (!file.type.match(/^image\//)) {
-                        showToast('Выберите изображение');
-                        document.getElementById('imageInput').value = '';
-                        return;
-                    }
-                    
-                    compressImage(file).then(function(compressed) {
-                        selectedImage = compressed;
-                        document.getElementById('previewImg').src = compressed;
-                        document.getElementById('imagePreview').style.display = 'block';
-                        document.getElementById('imageButton').classList.add('has-image');
-                    }).catch(function() {
-                        showToast('Ошибка загрузки');
-                    });
-                }
-            });
-            
-            document.getElementById('removeImageBtn').addEventListener('click', function() {
-                clearImageSelection();
-            });
-            
-            document.getElementById('addButton').addEventListener('click', function() {
-                var input = document.getElementById('movieInput');
-                var title = input.value.trim();
-                
-                if (title) {
-                    addMovie(title).then(function(success) {
-                        if (success) {
-                            input.focus();
-                        }
-                    });
-                } else {
-                    input.focus();
-                }
-            });
-
-            document.getElementById('movieInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('addButton').click();
-                }
-            });
-
-            document.querySelectorAll('.filter-chip').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-chip').forEach(function(b) {
-                        b.classList.remove('active');
-                    });
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.filter;
-                    renderMovies();
-                });
-            });
-
-            renderMovies();
-            document.getElementById('movieInput').focus();
-        });
+        // Запуск
+        loadFromGitHub();
     </script>
 </body>
 </html>
