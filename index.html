@@ -230,6 +230,21 @@
             animation: pulse 1.2s infinite;
         }
 
+        .search-indicator.found {
+            color: var(--accent);
+            cursor: pointer;
+            transition: var(--ease);
+        }
+
+        .search-indicator.found:hover {
+            background: var(--accent-dim);
+        }
+
+        .search-indicator.found .mini-dot {
+            background: #4ade80;
+            animation: none;
+        }
+
         .radio-row {
             display: flex;
             gap: 8px;
@@ -384,6 +399,7 @@
             padding: 12px 14px;
             margin-bottom: 7px;
             cursor: default;
+            position: relative;
         }
 
         .movie-item.watched {
@@ -458,6 +474,15 @@
             color: #d47878;
         }
 
+        .btn-edit {
+            color: var(--text-3);
+        }
+
+        .btn-edit:active {
+            background: rgba(184,148,75,0.15);
+            color: var(--accent);
+        }
+
         .toast {
             position: fixed;
             top: 16px;
@@ -518,6 +543,70 @@
             color: var(--text-2);
             font-size: 1.4rem;
             cursor: pointer;
+            font-family: inherit;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .edit-modal.show {
+            display: flex;
+        }
+
+        .edit-card {
+            background: var(--surface);
+            border-radius: var(--r-md);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .edit-card h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text);
+            letter-spacing: 1px;
+        }
+
+        .edit-card .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--r-full);
+            background: var(--surface-2);
+            color: var(--text-2);
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: inherit;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--r-full);
+            background: var(--accent);
+            color: #0a0a0b;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
             font-family: inherit;
         }
 
@@ -589,7 +678,7 @@
                 <label>Название</label>
                 <input type="text" id="titleInput" placeholder="Введите название фильма или сериала" maxlength="200">
 
-                <div class="search-indicator" id="searchIndicator">
+                <div class="search-indicator" id="searchIndicator" onclick="applyFoundTitle()">
                     <span class="mini-dot"></span>
                     <span id="searchStatus"></span>
                 </div>
@@ -637,6 +726,48 @@
     </div>
 
     <div class="toast" id="toast"></div>
+    <div class="edit-modal" id="editModal">
+        <div class="edit-card">
+            <h3>Редактировать</h3>
+            <label style="font-size:0.65rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;display:block;">Название</label>
+            <input type="text" id="editTitleInput" maxlength="200">
+            
+            <label style="font-size:0.65rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;display:block;margin-top:8px;">Тип</label>
+            <div class="radio-row">
+                <div class="radio-btn">
+                    <input type="radio" name="editType" id="editTypeMovie" value="movie">
+                    <label for="editTypeMovie">Фильм</label>
+                </div>
+                <div class="radio-btn">
+                    <input type="radio" name="editType" id="editTypeSeries" value="series">
+                    <label for="editTypeSeries">Сериал</label>
+                </div>
+            </div>
+
+            <div id="editSeriesFields" style="display:none; gap:8px; margin-bottom:8px;">
+                <input type="number" id="editSeriesTotal" placeholder="Всего серий" min="1" style="flex:1;margin-bottom:0;">
+                <input type="number" id="editSeriesWatched" placeholder="Просмотрено" min="0" style="flex:1;margin-bottom:0;">
+            </div>
+
+            <label style="font-size:0.65rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;display:block;margin-top:8px;">Постер</label>
+            <div class="add-actions">
+                <input type="file" id="editImageInput" accept="image/*" hidden>
+                <button type="button" class="btn-icon" id="editImageButton" onclick="document.getElementById('editImageInput').click()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="3"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                </button>
+                <span style="font-size:0.7rem;color:var(--text-3);">Нажмите чтобы заменить</span>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeEditModal()">Отмена</button>
+                <button class="btn-save" onclick="saveEdit()">Сохранить</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         var movies = [];
@@ -649,6 +780,8 @@
         var searchTimeout = null;
         var foundMeta = null;
         var contentType = 'movie';
+        var editingId = null;
+        var editImageData = null;
 
         try {
             var local = localStorage.getItem('movies_data');
@@ -659,6 +792,14 @@
             githubToken = localStorage.getItem('gh_token') || '';
             githubRepo = localStorage.getItem('gh_repo') || '';
         } catch(e) {}
+
+        // При клике на индикатор поиска — подставить найденное название
+        function applyFoundTitle() {
+            if (foundMeta && foundMeta.title) {
+                document.getElementById('titleInput').value = foundMeta.title;
+                showToast('Название подставлено: ' + foundMeta.title);
+            }
+        }
 
         function toggleSettings() {
             var card = document.getElementById('setupCard');
@@ -858,6 +999,7 @@
             }
 
             showSearchIndicator('Поиск информации...');
+            document.getElementById('searchIndicator').classList.remove('found');
             if (searchTimeout) clearTimeout(searchTimeout);
 
             searchTimeout = setTimeout(function() {
@@ -881,7 +1023,9 @@
 
                             var statusText = 'Найдено: ' + foundMeta.title;
                             if (foundMeta.year) statusText += ' (' + foundMeta.year + ')';
+                            statusText += ' — нажмите чтобы подставить';
                             showSearchIndicator(statusText);
+                            document.getElementById('searchIndicator').classList.add('found');
 
                             if (contentType === 'series' && foundMeta.totalEpisodes) {
                                 document.getElementById('seriesTotalInput').value = foundMeta.totalEpisodes;
@@ -896,7 +1040,8 @@
                                             if (!selectedImage) {
                                                 selectedImage = compressed;
                                                 showImagePreview(compressed);
-                                                showSearchIndicator('Постер загружен автоматически');
+                                                showSearchIndicator('Постер загружен — нажмите чтобы подставить название');
+                                                document.getElementById('searchIndicator').classList.add('found');
                                             }
                                         });
                                     })
@@ -921,7 +1066,9 @@
         }
 
         function hideSearchIndicator() {
-            document.getElementById('searchIndicator').classList.remove('visible');
+            var el = document.getElementById('searchIndicator');
+            el.classList.remove('visible');
+            el.classList.remove('found');
         }
 
         function showImagePreview(src) {
@@ -992,7 +1139,7 @@
             foundMeta = null;
             render();
             saveToGitHub();
-            showToast('Добавлено');
+            showToast('Добавлено: ' + title);
         }
 
         function clearForm() {
@@ -1028,6 +1175,99 @@
                 saveToGitHub();
             }
         }
+
+        function openEditModal(id) {
+            var movie = movies.find(function(m) { return m.id === id; });
+            if (!movie) return;
+
+            editingId = id;
+            editImageData = null;
+
+            document.getElementById('editTitleInput').value = movie.title;
+
+            if (movie.type === 'series') {
+                document.getElementById('editTypeSeries').checked = true;
+                document.getElementById('editSeriesFields').style.display = 'flex';
+                document.getElementById('editSeriesTotal').value = movie.seriesTotal || '';
+                document.getElementById('editSeriesWatched').value = movie.seriesWatched || 0;
+            } else {
+                document.getElementById('editTypeMovie').checked = true;
+                document.getElementById('editSeriesFields').style.display = 'none';
+            }
+
+            document.getElementById('editImageInput').value = '';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingId = null;
+            editImageData = null;
+        }
+
+        function saveEdit() {
+            if (!editingId) return;
+
+            var movie = movies.find(function(m) { return m.id === editingId; });
+            if (!movie) return;
+
+            var newTitle = document.getElementById('editTitleInput').value.trim();
+            if (!newTitle) {
+                showToast('Название не может быть пустым');
+                return;
+            }
+
+            var exists = movies.some(function(m) {
+                return m.id !== editingId && m.title.toLowerCase() === newTitle.toLowerCase();
+            });
+
+            if (exists) {
+                showToast('Фильм с таким названием уже есть');
+                return;
+            }
+
+            movie.title = newTitle;
+            movie.type = document.getElementById('editTypeSeries').checked ? 'series' : 'movie';
+
+            if (movie.type === 'series') {
+                movie.seriesTotal = parseInt(document.getElementById('editSeriesTotal').value) || null;
+                movie.seriesWatched = parseInt(document.getElementById('editSeriesWatched').value) || 0;
+            } else {
+                movie.seriesTotal = null;
+                movie.seriesWatched = 0;
+            }
+
+            if (editImageData) {
+                movie.image = editImageData;
+            }
+
+            closeEditModal();
+            render();
+            saveToGitHub();
+            showToast('Сохранено: ' + newTitle);
+        }
+
+        document.getElementById('editTypeSeries').addEventListener('change', function() {
+            document.getElementById('editSeriesFields').style.display = 'flex';
+        });
+
+        document.getElementById('editTypeMovie').addEventListener('change', function() {
+            document.getElementById('editSeriesFields').style.display = 'none';
+        });
+
+        document.getElementById('editImageInput').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast('Файл слишком большой (макс 5 МБ)');
+                    return;
+                }
+                compressImage(file).then(function(compressed) {
+                    editImageData = compressed;
+                    document.getElementById('editImageButton').classList.add('has-image');
+                });
+            }
+        });
 
         function openImageModal(src) {
             var modal = document.getElementById('imageModal');
@@ -1084,7 +1324,12 @@
         });
 
         document.getElementById('titleInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') addMovie();
+            if (e.key === 'Enter') {
+                if (foundMeta && foundMeta.title) {
+                    document.getElementById('titleInput').value = foundMeta.title;
+                }
+                addMovie();
+            }
         });
 
         document.getElementById('imageInput').addEventListener('change', function(e) {
@@ -1138,7 +1383,7 @@
                 if (m.image) {
                     posterHtml = '<img src="' + m.image + '" class="movie-poster" alt="Постер" onclick="openImageModal(\'' + m.image + '\')">';
                 } else {
-                    posterHtml = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">' + (m.type === 'series' ? 'Сер' : 'Фил') + '</div>';
+                    posterHtml = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">' + (m.type === 'series' ? 'Сер' : 'Фил') + '</div>';
                 }
 
                 var badge = m.type === 'series' ? '<span class="badge">Сериал</span>' : '<span class="badge">Фильм</span>';
@@ -1157,6 +1402,7 @@
                         '<div class="movie-name">' + escapeText(m.title) + '</div>' +
                         '<div class="movie-meta">' + badge + yearInfo + seriesInfo + ' • ' + m.dateAdded + '</div>' +
                     '</div>' +
+                    '<button class="btn-sm btn-edit" onclick="openEditModal(' + m.id + ')" title="Редактировать">✎</button>' +
                     '<button class="btn-sm" onclick="toggleMovie(' + m.id + ')" title="Отметить">' + (m.watched ? '↩' : '✓') + '</button>' +
                     '<button class="btn-sm" onclick="deleteMovie(' + m.id + ')" title="Удалить">✕</button>' +
                 '</div>';
