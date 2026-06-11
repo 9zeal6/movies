@@ -17,10 +17,12 @@
             --text-3: #63636b;
             --accent: #b8944b;
             --accent-soft: #d4b96a;
+            --accent-dim: rgba(184, 148, 75, 0.18);
             --r-sm: 12px;
             --r-md: 18px;
             --r-full: 100px;
             --safe-bottom: env(safe-area-inset-bottom, 16px);
+            --ease: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
         * {
@@ -49,7 +51,9 @@
         }
 
         .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
 
@@ -59,6 +63,27 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text);
+        }
+
+        .btn-settings {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r-full);
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.04);
+            color: var(--text-3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--ease);
+            font-family: inherit;
+            flex-shrink: 0;
+        }
+
+        .btn-settings:active {
+            background: var(--surface-2);
+            color: var(--accent);
         }
 
         .sync-bar {
@@ -167,7 +192,8 @@
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        input[type="password"] {
             width: 100%;
             padding: 12px 16px;
             background: var(--surface-2);
@@ -251,53 +277,102 @@
             margin-bottom: 0;
         }
 
-        .image-row {
+        .add-actions {
             display: flex;
             gap: 8px;
-            margin-bottom: 8px;
             align-items: center;
         }
 
-        .image-row input[type="file"] {
-            flex: 1;
-            margin-bottom: 0;
-            padding: 10px 14px;
-            font-size: 0.75rem;
-        }
-
-        .image-preview-mini {
-            width: 42px;
-            height: 56px;
-            border-radius: 10px;
-            object-fit: cover;
-            background: var(--surface-2);
-            flex-shrink: 0;
-            display: none;
-        }
-
-        .image-preview-mini.visible {
-            display: block;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 13px;
+        .btn-icon {
+            width: 44px;
+            height: 44px;
             border-radius: var(--r-full);
-            border: none;
-            font-size: 0.85rem;
-            font-weight: 700;
+            background: var(--surface-2);
+            color: var(--text-2);
+            border: 1px solid rgba(255,255,255,0.05);
             cursor: pointer;
-            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--ease);
             font-family: inherit;
         }
 
-        .btn-add {
-            background: var(--accent);
-            color: #0a0a0b;
+        .btn-icon:active {
+            transform: scale(0.94);
         }
 
-        .btn-add:active {
+        .btn-icon.has-image {
+            color: var(--accent-soft);
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 13px 24px;
+            border-radius: var(--r-full);
+            background: var(--accent);
+            color: #0a0a0b;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: var(--ease);
+            font-family: inherit;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
             background: var(--accent-soft);
+        }
+
+        .preview-area {
+            margin-bottom: 12px;
+        }
+
+        .preview-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: var(--r-sm);
+            overflow: hidden;
+            animation: fadeIn 0.4s var(--ease);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .preview-wrapper img {
+            max-height: 110px;
+            display: block;
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 26px;
+            height: 26px;
+            border-radius: var(--r-full);
+            background: rgba(10, 10, 11, 0.85);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+
+        .preview-remove:active {
+            background: rgba(190, 60, 60, 0.8);
         }
 
         .movie-item {
@@ -443,6 +518,26 @@
             color: var(--text-2);
             font-size: 1.4rem;
             cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--r-full);
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+            margin-top: 8px;
+        }
+
+        .btn-logout:active {
+            background: rgba(239, 68, 68, 0.1);
         }
     </style>
 </head>
@@ -450,6 +545,12 @@
     <div class="app" id="app">
         <div class="header">
             <h1>Коллекция</h1>
+            <button class="btn-settings" onclick="toggleSettings()" title="Настройки синхронизации">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
         </div>
 
         <div class="sync-bar">
@@ -458,11 +559,15 @@
         </div>
 
         <div id="setupCard" class="card" style="display:none;">
-            <p style="font-size:0.8rem;color:var(--text-2);margin-bottom:12px;text-align:center;">Для синхронизации нужен токен GitHub</p>
-            <input type="text" id="tokenInput" placeholder="Токен GitHub">
+            <label>Токен GitHub</label>
+            <input type="password" id="tokenInput" placeholder="ghp_...">
+            <label>Репозиторий</label>
             <input type="text" id="repoInput" placeholder="username/repository">
-            <button class="btn btn-add" onclick="saveConfig()">Подключить</button>
-            <p style="font-size:0.65rem;color:var(--text-3);margin-top:8px;text-align:center;">Токен создаётся в Settings → Developer settings → Tokens (classic). Нужна только галочка repo.</p>
+            <button class="btn-primary" onclick="saveConfig()" style="margin-bottom:0;">Подключить</button>
+            <button class="btn-logout" onclick="logoutConfig()" style="display:none;" id="logoutBtn">Отключить синхронизацию</button>
+            <p style="font-size:0.6rem;color:var(--text-3);margin-top:8px;text-align:center;line-height:1.4;">
+                Токен: Settings → Developer settings → Tokens (classic)<br>Нужна галочка repo
+            </p>
         </div>
 
         <div id="mainContent" style="display:none;">
@@ -506,13 +611,25 @@
                     <input type="number" id="seriesWatchedInput" placeholder="Просмотрено" min="0">
                 </div>
 
-                <label>Постер</label>
-                <div class="image-row">
-                    <input type="file" id="imageInput" accept="image/*">
-                    <img id="imagePreviewMini" class="image-preview-mini" src="" alt="">
+                <div class="preview-area" id="imagePreviewArea" style="display:none;">
+                    <div class="preview-wrapper">
+                        <img id="previewImg" src="" alt="Предпросмотр">
+                        <button class="preview-remove" onclick="clearImage()">✕</button>
+                    </div>
                 </div>
 
-                <button class="btn btn-add" id="addBtn" onclick="addMovie()">Добавить</button>
+                <label>Постер</label>
+                <div class="add-actions">
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                    <button type="button" class="btn-icon" id="imageButton" onclick="document.getElementById('imageInput').click()" title="Добавить постер">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="3"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <path d="M21 15l-5-5L5 21"/>
+                        </svg>
+                    </button>
+                    <button class="btn-primary" onclick="addMovie()">Добавить</button>
+                </div>
             </div>
 
             <div id="movieContainer"></div>
@@ -543,22 +660,65 @@
             githubRepo = localStorage.getItem('gh_repo') || '';
         } catch(e) {}
 
-        function saveConfig() {
-            githubToken = document.getElementById('tokenInput').value.trim();
-            githubRepo = document.getElementById('repoInput').value.trim();
+        function toggleSettings() {
+            var card = document.getElementById('setupCard');
+            var main = document.getElementById('mainContent');
             
-            if (!githubToken || !githubRepo) {
+            if (card.style.display === 'block') {
+                card.style.display = 'none';
+                if (movies.length > 0 || githubToken) {
+                    main.style.display = 'block';
+                }
+            } else {
+                card.style.display = 'block';
+                if (githubToken) {
+                    document.getElementById('tokenInput').value = githubToken;
+                    document.getElementById('repoInput').value = githubRepo;
+                    document.getElementById('logoutBtn').style.display = 'block';
+                }
+            }
+        }
+
+        function saveConfig() {
+            var token = document.getElementById('tokenInput').value.trim();
+            var repo = document.getElementById('repoInput').value.trim();
+            
+            if (!token || !repo) {
                 showToast('Заполните оба поля');
                 return;
             }
+
+            githubToken = token;
+            githubRepo = repo;
 
             try {
                 localStorage.setItem('gh_token', githubToken);
                 localStorage.setItem('gh_repo', githubRepo);
             } catch(e) {}
 
+            document.getElementById('logoutBtn').style.display = 'block';
             showToast('Сохранено! Загружаю данные...');
             loadFromGitHub();
+        }
+
+        function logoutConfig() {
+            if (confirm('Отключить синхронизацию? Локальные данные сохранятся.')) {
+                githubToken = '';
+                githubRepo = '';
+                dataFileSha = '';
+                try {
+                    localStorage.removeItem('gh_token');
+                    localStorage.removeItem('gh_repo');
+                } catch(e) {}
+                
+                document.getElementById('tokenInput').value = '';
+                document.getElementById('repoInput').value = '';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('setupCard').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                setSyncStatus('local');
+                showToast('Синхронизация отключена');
+            }
         }
 
         function setSyncStatus(status) {
@@ -580,8 +740,7 @@
 
         function loadFromGitHub() {
             if (!githubToken || !githubRepo) {
-                document.getElementById('setupCard').style.display = 'block';
-                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
                 setSyncStatus('local');
                 render();
                 return;
@@ -736,9 +895,7 @@
                                         compressImage(blob, 200).then(function(compressed) {
                                             if (!selectedImage) {
                                                 selectedImage = compressed;
-                                                var preview = document.getElementById('imagePreviewMini');
-                                                preview.src = compressed;
-                                                preview.classList.add('visible');
+                                                showImagePreview(compressed);
                                                 showSearchIndicator('Постер загружен автоматически');
                                             }
                                         });
@@ -765,6 +922,22 @@
 
         function hideSearchIndicator() {
             document.getElementById('searchIndicator').classList.remove('visible');
+        }
+
+        function showImagePreview(src) {
+            var area = document.getElementById('imagePreviewArea');
+            var img = document.getElementById('previewImg');
+            img.src = src;
+            area.style.display = 'block';
+            document.getElementById('imageButton').classList.add('has-image');
+        }
+
+        function clearImage() {
+            selectedImage = null;
+            document.getElementById('imagePreviewArea').style.display = 'none';
+            document.getElementById('previewImg').src = '';
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imageButton').classList.remove('has-image');
         }
 
         function showToast(msg) {
@@ -829,10 +1002,7 @@
             document.getElementById('typeMovie').checked = true;
             contentType = 'movie';
             document.getElementById('seriesFields').classList.remove('visible');
-            selectedImage = null;
-            document.getElementById('imagePreviewMini').classList.remove('visible');
-            document.getElementById('imagePreviewMini').src = '';
-            document.getElementById('imageInput').value = '';
+            clearImage();
         }
 
         function toggleMovie(id) {
@@ -930,9 +1100,7 @@
                 }
                 compressImage(file).then(function(compressed) {
                     selectedImage = compressed;
-                    var preview = document.getElementById('imagePreviewMini');
-                    preview.src = compressed;
-                    preview.classList.add('visible');
+                    showImagePreview(compressed);
                 }).catch(function() {
                     showToast('Ошибка загрузки');
                 });
@@ -970,7 +1138,7 @@
                 if (m.image) {
                     posterHtml = '<img src="' + m.image + '" class="movie-poster" alt="Постер" onclick="openImageModal(\'' + m.image + '\')">';
                 } else {
-                    posterHtml = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-3);">' + (m.type === 'series' ? 'S' : 'F') + '</div>';
+                    posterHtml = '<div class="movie-poster" style="display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;">' + (m.type === 'series' ? 'Сер' : 'Фил') + '</div>';
                 }
 
                 var badge = m.type === 'series' ? '<span class="badge">Сериал</span>' : '<span class="badge">Фильм</span>';
@@ -989,8 +1157,8 @@
                         '<div class="movie-name">' + escapeText(m.title) + '</div>' +
                         '<div class="movie-meta">' + badge + yearInfo + seriesInfo + ' • ' + m.dateAdded + '</div>' +
                     '</div>' +
-                    '<button class="btn-sm" onclick="toggleMovie(' + m.id + ')">' + (m.watched ? '↩' : '✓') + '</button>' +
-                    '<button class="btn-sm" onclick="deleteMovie(' + m.id + ')">✕</button>' +
+                    '<button class="btn-sm" onclick="toggleMovie(' + m.id + ')" title="Отметить">' + (m.watched ? '↩' : '✓') + '</button>' +
+                    '<button class="btn-sm" onclick="deleteMovie(' + m.id + ')" title="Удалить">✕</button>' +
                 '</div>';
             }
             container.innerHTML = html;
